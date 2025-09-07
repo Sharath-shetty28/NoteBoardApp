@@ -12,6 +12,15 @@ const App = () => {
         <Route path="/create" element={<CreatePage />} />
         <Route path="/note/:id" element={<NoteDetailPage />} />
       </Routes>
+      {"serviceWorker" in navigator && (
+        <script>
+          {`
+            window.addEventListener("load", () => {
+              navigator.serviceWorker.register("/service-worker.js");
+            });
+          `}
+        </script>
+      )}
     </div>
   );
 };

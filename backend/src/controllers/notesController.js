@@ -45,7 +45,8 @@ export async function updateNote(req, res) {
       }
     );
 
-    if (!updatedNote) return res.status(404).json({ message: "Note not found" });
+    if (!updatedNote)
+      return res.status(404).json({ message: "Note not found" });
 
     res.status(200).json(updatedNote);
   } catch (error) {
@@ -57,10 +58,39 @@ export async function updateNote(req, res) {
 export async function deleteNote(req, res) {
   try {
     const deletedNote = await Note.findByIdAndDelete(req.params.id);
-    if (!deletedNote) return res.status(404).json({ message: "Note not found" });
+    if (!deletedNote)
+      return res.status(404).json({ message: "Note not found" });
     res.status(200).json({ message: "Note deleted successfully!" });
   } catch (error) {
     console.error("Error in deleteNote controller", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+// controllers/noteController.js
+export async function syncNotes(req, res) {
+  try {
+    const notes = req.body.notes; // array of offline notes
+
+    const syncedNotes = [];
+
+    for (let note of notes) {
+      if (note._id) {
+        // If _id exists, try to update
+        const updated = await Note.findByIdAndUpdate(note._id, note, {
+          new: true,
+        });
+        if (updated) syncedNotes.push(updated);
+      } else {
+        // If no _id (new note created offline), insert it
+        const newNote = new Note(note);
+        await newNote.save();
+        syncedNotes.push(newNote);
+      }
+    }
+
+    res.status(200).json({ success: true, data: syncedNotes });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 }
