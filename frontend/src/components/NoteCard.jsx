@@ -9,12 +9,19 @@ const NoteCard = ({ note, setNotes }) => {
   const handleDelete = async (e, id) => {
     e.preventDefault(); // get rid of the navigation behaviour
 
+    if (!id) {
+      console.error("❌ Tried to delete but got no id");
+      toast.error("Note ID missing");
+      return;
+    }
+
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
       // await api.delete(`/notes/${id}`);
       await deleteNote(id);
-      setNotes((prev) => prev.filter((note) => note._id !== id)); // get rid of the deleted one
+      // setNotes((prev) => prev.filter((note) => note._id !== id)); // get rid of the deleted one
+      setNotes((prev) => prev.filter((note) => (note._id || note.id) !== id));
       toast.success("Note deleted successfully");
     } catch (error) {
       console.log("Error in handleDelete", error);
@@ -39,7 +46,7 @@ const NoteCard = ({ note, setNotes }) => {
             <PenSquareIcon className="size-4" />
             <button
               className="btn btn-ghost btn-xs text-error"
-              onClick={(e) => handleDelete(e, note._id)}
+              onClick={(e) => handleDelete(e, note._id || note.id)}
             >
               <Trash2Icon className="size-4" />
             </button>

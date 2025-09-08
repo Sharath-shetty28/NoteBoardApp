@@ -44,5 +44,18 @@ export async function getNote(id) {
 
 export async function deleteNote(id) {
   const db = await initDB();
-  return db.delete(STORE_NAME, id);
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  const store = tx.objectStore(STORE_NAME);
+
+  const note = await store.get(id);
+  if (note) {
+    await store.delete(id);
+    console.log(`Note ${id} deleted from IndexedDB`);
+    await tx.done;
+    return true;
+  } else {
+    console.warn(`Note ${id} not found in IndexedDB`);
+    await tx.done;
+    return false;
+  }
 }

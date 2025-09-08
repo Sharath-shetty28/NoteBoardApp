@@ -52,12 +52,11 @@ const NoteDetailPage = () => {
       toast.error("Please add a title or content");
       return;
     }
-
     setSaving(true);
-
     try {
       // await api.put(`/notes/${id}`, note);
       await updateNote(id, note);
+      console.log("Note updated:", typeof id, id);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {

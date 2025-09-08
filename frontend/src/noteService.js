@@ -65,11 +65,11 @@ export async function updateNote(id, updates) {
       return res.data;
     } catch (err) {
       console.log("Update failed, saving offline...");
-      return await updateLocalNote(id, { ...updates, synced: false });
+      return await updateLocalNote(id), { ...updates, synced: false });
     }
   } else {
     console.log("Offline, saving update locally...");
-    return await updateLocalNote(id, { ...updates, synced: false });
+    return await updateLocalNote(id), { ...updates, synced: false });
   }
 }
 
@@ -81,10 +81,10 @@ export async function deleteNote(id) {
       return true;
     } catch (err) {
       console.log("Delete failed, marking locally...");
-      return await deleteLocalNote(id);
+      return await deleteLocalNote(Number(id));
     }
   } else {
     console.log("Offline, deleting locally...");
-    return await deleteLocalNote(id);
+    return await deleteLocalNote(Number(id));
   }
 }
