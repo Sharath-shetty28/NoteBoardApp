@@ -4,23 +4,51 @@ import { openDB } from "idb";
 const DB_NAME = "notes-db";
 const STORE_NAME = "notes";
 
+// export async function initDB() {
+//   return openDB(DB_NAME, 1, {
+//     upgrade(db) {
+//       if (!db.objectStoreNames.contains(STORE_NAME)) {
+//         db.createObjectStore(STORE_NAME, {
+//           keyPath: "id",
+//           autoIncrement: true,
+//         });
+//         console.log("IndexedDB setup complete");
+//       }
+//     },
+//   });
+
 export async function initDB() {
-  return openDB(DB_NAME, 1, {
+  return openDB(DB_NAME, 2, {
+    // bump version to trigger upgrade
     upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, {
-          keyPath: "id",
-          autoIncrement: true,
-        });
-        console.log("IndexedDB setup complete");
+      if (db.objectStoreNames.contains(STORE_NAME)) {
+        db.deleteObjectStore(STORE_NAME); // drop old broken store
       }
+      db.createObjectStore(STORE_NAME, {
+        keyPath: "id", // use your Mongo string id
+      });
+      console.log("IndexedDB setup fixed: string ids supported");
     },
   });
 }
 
+// export async function addNoteOffline(note) {
+//   const db = await initDB();
+//   await db.add(STORE_NAME, { ...note, synced: false, createdAt: Date.now() });
+// }
+
 export async function addNoteOffline(note) {
   const db = await initDB();
-  await db.add(STORE_NAME, { ...note, synced: false, createdAt: Date.now() });
+  const id = note.id || crypto.randomUUID();
+  const newNote = {
+    ...note,
+    id,
+    synced: false,
+    createdAt: Date.now(),
+  };
+
+  await db.add(STORE_NAME, newNote);
+  return newNote;
 }
 
 export async function getAllNotes() {
