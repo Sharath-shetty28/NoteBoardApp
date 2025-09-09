@@ -4,19 +4,6 @@ import { openDB } from "idb";
 const DB_NAME = "notes-db";
 const STORE_NAME = "notes";
 
-// export async function initDB() {
-//   return openDB(DB_NAME, 1, {
-//     upgrade(db) {
-//       if (!db.objectStoreNames.contains(STORE_NAME)) {
-//         db.createObjectStore(STORE_NAME, {
-//           keyPath: "id",
-//           autoIncrement: true,
-//         });
-//         console.log("IndexedDB setup complete");
-//       }
-//     },
-//   });
-
 export async function initDB() {
   return openDB(DB_NAME, 2, {
     // bump version to trigger upgrade
@@ -31,11 +18,6 @@ export async function initDB() {
     },
   });
 }
-
-// export async function addNoteOffline(note) {
-//   const db = await initDB();
-//   await db.add(STORE_NAME, { ...note, synced: false, createdAt: Date.now() });
-// }
 
 export async function addNoteOffline(note) {
   const db = await initDB();
