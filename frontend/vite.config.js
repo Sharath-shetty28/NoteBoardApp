@@ -1,11 +1,3 @@
-// import { defineConfig } from 'vite'
-// import react from '@vitejs/plugin-react'
-
-// // https://vite.dev/config/
-// export default defineConfig({
-//   plugins: [react()],
-// })
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -22,7 +14,7 @@ export default defineConfig({
         "apple-touch-icon.png",
       ],
       manifest: {
-        name: "NotesApp",
+        name: "NoteBoardApp",
         short_name: "Notes",
         description: "A simple notes app with MERN stack",
         theme_color: "#ffffff",
@@ -44,4 +36,9 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    proxy: {
+      "/api": "http://localhost:5001", // forward all /api calls to backend
+    },
+  },
 });

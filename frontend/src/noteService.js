@@ -7,6 +7,47 @@ import {
   deleteNote as deleteLocalNote,
 } from "./idb";
 
+let isSyncing = false;
+
+export async function syncAllNotes() {
+  if (!navigator.onLine || isSyncing) return;
+
+  isSyncing = true; // prevent re-entry
+  try {
+    const notes = await getAllLocalNotes();
+
+    for (const note of notes) {
+      if (!note.synced) {
+        try {
+          await createNote(note);
+          await updateLocalNote(note.id, { synced: true, localonly: false });
+          // await deleteLocalNote(note.id);
+        } catch (err) {
+          console.error("❌ Failed to sync note:", note, err);
+        }
+      } else {
+        console.log("⏩ Skipped (already synced):", note.title);
+      }
+    }
+  } finally {
+    isSyncing = false; // release lock
+  }
+}
+
+export async function syncOfflineNotes(id) {
+  try {
+    const note = await fetchNote(id);
+    if (note.localonly) {
+      await createNote(note);
+      await updateLocalNote(note.id, { synced: true, localonly: false });
+    } else {
+      console.log("Note already synced:", note.title);
+    }
+  } catch (err) {
+    console.error("❌ Failed to sync note:", err);
+  }
+}
+
 const ENDPOINT = "/notes";
 
 // Fetch all notes
@@ -46,14 +87,19 @@ export async function createNote(note) {
   if (navigator.onLine) {
     try {
       const res = await api.post(ENDPOINT, note);
+      console.log("Endpoint:", ENDPOINT);
       return res.data;
     } catch (err) {
       console.log("Create failed, saving offline...");
-      return await addNoteOffline(note);
+      const saved = await addNoteOffline(note);
+
+      return saved;
     }
   } else {
     console.log("Offline, saving note locally...");
-    return await addNoteOffline(note);
+    const saved = await addNoteOffline(note);
+
+    return saved;
   }
 }
 

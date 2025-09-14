@@ -25,11 +25,12 @@ export async function addNoteOffline(note) {
   const newNote = {
     ...note,
     id,
+    localonly: true,
     synced: false,
     createdAt: Date.now(),
   };
 
-  await db.add(STORE_NAME, newNote);
+  await db.put(STORE_NAME, newNote);
   return newNote;
 }
 
