@@ -43,12 +43,6 @@ const Navbar = () => {
                 Sync All Notes
               </button>
             )}
-            <button
-              onClick={(e) => handleSync(e)}
-              className="btn btn-primary"
-            >
-              Sync All Notes
-            </button>
             <Link to={"/create"} className="btn btn-primary">
               <PlusIcon className="size-5" />
               <span>New Note</span>
