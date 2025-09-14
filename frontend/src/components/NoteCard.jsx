@@ -19,7 +19,10 @@ const NoteCard = ({ note, setNotes }) => {
       return;
     }
 
-    if(note.localonly && !note.synced) {
+    if (note.synconly) {
+      console.log("local");
+    }
+    if (note.localonly && !note.synced) {
       toast.error("Note is already synced");
       return;
     }

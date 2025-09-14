@@ -16,7 +16,7 @@ const HomePage = () => {
       try {
         const res = await fetchNotes();
         setNotes(res);
-        console.log("Fetched notes:", res);
+        // console.log("Fetched notes:", res);
         setIsRateLimited(false);
       } catch (error) {
         console.log("Error fetching notes:", error);
