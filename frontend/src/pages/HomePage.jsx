@@ -11,21 +11,15 @@ const HomePage = () => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // window.addEventListener("online", () => {
-  //   console.log("Back online, syncing notes...");
-  //   syncIndexedDBToMongoDB();
-  // });
-
   useEffect(() => {
     const loadNotes = async () => {
       try {
         const res = await fetchNotes();
         setNotes(res);
-        console.log(res);
+        console.log("Fetched notes:", res);
         setIsRateLimited(false);
       } catch (error) {
-        console.log("Error fetching notes");
-        console.log(error.response);
+        console.log("Error fetching notes:", error);
         if (error.response?.status === 429) {
           setIsRateLimited(true);
         } else {
