@@ -67,3 +67,31 @@ export async function deleteNote(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+// GET /notes?range=24h
+export async function getFilteredNotes(req, res) {
+  try {
+    const { range } = req.query;
+    const now = new Date();
+    let filter = {};
+
+    if (range === "24h") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      };
+    } else if (range === "7d") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+      };
+    } else if (range === "30d") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+      };
+    }
+
+    const notes = await Note.find(filter).sort({ updatedAt: -1 });
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error("Error in getFilteredNotes controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
