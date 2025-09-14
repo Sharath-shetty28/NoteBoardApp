@@ -2,7 +2,8 @@ import { ArrowLeftIcon } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
-import api from "../lib/axios";
+// import api from "../lib/axios";
+import { createNote } from "../noteService";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
@@ -21,11 +22,13 @@ const CreatePage = () => {
 
     setLoading(true);
     try {
-      await api.post("/notes", {
-        title,
-        content,
-      });
+      // await api.post("/notes", {
+      //   title,
+      //   content,
+      // });
 
+      const note = { title, content };
+      await createNote(note);
       toast.success("Note created successfully!");
       navigate("/");
     } catch (error) {
@@ -47,7 +50,7 @@ const CreatePage = () => {
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <Link to={"/"} className="btn btn-ghost mb-6">
+          <Link to={"/"} className="btn btn-outline btn-success mb-6">
             <ArrowLeftIcon className="size-5" />
             Back to Notes
           </Link>
@@ -82,7 +85,11 @@ const CreatePage = () => {
                 </div>
 
                 <div className="card-actions justify-end">
-                  <button type="submit" className="btn btn-primary" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={loading}
+                  >
                     {loading ? "Creating..." : "Create Note"}
                   </button>
                 </div>

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import api from "../lib/axios";
+// import api from "../lib/axios";
 import toast from "react-hot-toast";
+import { fetchNote, updateNote, deleteNote } from "../noteService";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
 
 const NoteDetailPage = () => {
@@ -15,10 +16,12 @@ const NoteDetailPage = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchNote = async () => {
+    const fetchNotes = async () => {
       try {
-        const res = await api.get(`/notes/${id}`);
-        setNote(res.data);
+        // const res = await fetchNote(id);
+        // setNote(res.data);
+        const res = await fetchNote(id);
+        setNote(res);
       } catch (error) {
         console.log("Error in fetching note", error);
         toast.error("Failed to fetch the note");
@@ -27,14 +30,15 @@ const NoteDetailPage = () => {
       }
     };
 
-    fetchNote();
+    fetchNotes();
   }, [id]);
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
-      await api.delete(`/notes/${id}`);
+      // await api.delete(`/notes/${id}`);
+      await deleteNote(id);
       toast.success("Note deleted");
       navigate("/");
     } catch (error) {
@@ -48,11 +52,11 @@ const NoteDetailPage = () => {
       toast.error("Please add a title or content");
       return;
     }
-
     setSaving(true);
-
     try {
-      await api.put(`/notes/${id}`, note);
+      // await api.put(`/notes/${id}`, note);
+      await updateNote(id, note);
+      console.log("Note updated:", typeof id, id);
       toast.success("Note updated successfully");
       navigate("/");
     } catch (error) {
@@ -76,11 +80,14 @@ const NoteDetailPage = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           <div className="flex items-center justify-between mb-6">
-            <Link to="/" className="btn btn-ghost">
+            <Link to="/" className="btn btn-outline btn-success">
               <ArrowLeftIcon className="h-5 w-5" />
               Back to Notes
             </Link>
-            <button onClick={handleDelete} className="btn btn-error btn-outline">
+            <button
+              onClick={handleDelete}
+              className="btn btn-error btn-outline"
+            >
               <Trash2Icon className="h-5 w-5" />
               Delete Note
             </button>
@@ -109,12 +116,18 @@ const NoteDetailPage = () => {
                   placeholder="Write your note here..."
                   className="textarea textarea-bordered h-32"
                   value={note.content}
-                  onChange={(e) => setNote({ ...note, content: e.target.value })}
+                  onChange={(e) =>
+                    setNote({ ...note, content: e.target.value })
+                  }
                 />
               </div>
 
               <div className="card-actions justify-end">
-                <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
+                <button
+                  className="btn btn-primary"
+                  disabled={saving}
+                  onClick={handleSave}
+                >
                   {saving ? "Saving..." : "Save Changes"}
                 </button>
               </div>

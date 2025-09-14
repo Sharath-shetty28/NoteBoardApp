@@ -2,7 +2,8 @@ import Note from "../models/Note.js";
 
 export async function getAllNotes(_, res) {
   try {
-    const notes = await Note.find().sort({ createdAt: -1 }); // -1 will sort in desc. order (newest first)
+    // const notes = await Note.find().sort({ createdAt: -1 }); // -1 will sort in desc. order (newest first)
+    const notes = await Note.find().sort({ updatedAt: -1, createdAt: -1 });
     res.status(200).json(notes);
   } catch (error) {
     console.error("Error in getAllNotes controller", error);
@@ -45,7 +46,8 @@ export async function updateNote(req, res) {
       }
     );
 
-    if (!updatedNote) return res.status(404).json({ message: "Note not found" });
+    if (!updatedNote)
+      return res.status(404).json({ message: "Note not found" });
 
     res.status(200).json(updatedNote);
   } catch (error) {
@@ -57,10 +59,39 @@ export async function updateNote(req, res) {
 export async function deleteNote(req, res) {
   try {
     const deletedNote = await Note.findByIdAndDelete(req.params.id);
-    if (!deletedNote) return res.status(404).json({ message: "Note not found" });
+    if (!deletedNote)
+      return res.status(404).json({ message: "Note not found" });
     res.status(200).json({ message: "Note deleted successfully!" });
   } catch (error) {
     console.error("Error in deleteNote controller", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+// GET /notes?range=24h
+export async function getFilteredNotes(req, res) {
+  try {
+    const { range } = req.query;
+    const now = new Date();
+    let filter = {};
+
+    if (range === "24h") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 24 * 60 * 60 * 1000),
+      };
+    } else if (range === "7d") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+      };
+    } else if (range === "30d") {
+      filter.updatedAt = {
+        $gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+      };
+    }
+
+    const notes = await Note.find(filter).sort({ updatedAt: -1 });
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error("Error in getFilteredNotes controller", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
