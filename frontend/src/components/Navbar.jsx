@@ -16,6 +16,8 @@ const Navbar = () => {
       );
       return;
     }
+    if (!window.confirm("Are you sure you want to sync this note?")) return;
+
     try {
       toast.promise(syncAllNotes(), {
         loading: "Syncing all notes...",

@@ -12,6 +12,12 @@ const NoteCard = ({ note, setNotes }) => {
 
   const handleSync = async (e, id) => {
     e.preventDefault();
+    if (!navigator.onLine) {
+      toast.error(
+        "You are currently offline. Please connect to the internet to sync notes."
+      );
+      return;
+    }
 
     if (!id) {
       toast.error("Note ID missing");
