@@ -40,7 +40,7 @@ const Navbar = () => {
             {isPWA && (
               <button
                 onClick={(e) => handleSync(e)}
-                className="btn bg-green-500 btn-xs"
+                className="btn btn-primary"
               >
                 Sync All Notes
               </button>

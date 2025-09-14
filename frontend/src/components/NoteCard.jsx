@@ -19,10 +19,11 @@ const NoteCard = ({ note, setNotes }) => {
       return;
     }
 
-    if (!id) {
-      toast.error("Note ID missing");
+    if(note.localonly && !note.synced) {
+      toast.error("Note is already synced");
       return;
     }
+
     if (!window.confirm("Are you sure you want to sync this note?")) return;
     try {
       toast.promise(syncOfflineNotes(id), {

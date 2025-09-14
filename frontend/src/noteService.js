@@ -41,7 +41,7 @@ export async function syncOfflineNotes(id) {
       await createNote(note);
       await updateLocalNote(note.id, { synced: true, localonly: false });
     } else {
-      console.log("Note already synced:", note.title);
+      return note.title;
     }
   } catch (err) {
     console.error("❌ Failed to sync note:", err);
