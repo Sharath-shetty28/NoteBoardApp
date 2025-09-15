@@ -63,8 +63,8 @@ const NoteCard = ({ note, setNotes }) => {
   return (
     <Link
       to={`/note/${note._id || note.id}`}
-      className="card bg-base-100 hover:shadow-lg transition-all duration-200 
-      border-t-4 border-solid border-[#00FF9D]"
+      className="card bg-base-200 hover:shadow-lg transition-all duration-200 
+      border-t-4 border-solid border-[#7480FF] hover:border-[#3740FF]"
     >
       <div className="card-body">
         <h3 className="card-title text-base-content">{note.title}</h3>
