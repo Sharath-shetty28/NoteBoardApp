@@ -22,11 +22,6 @@ const CreatePage = () => {
 
     setLoading(true);
     try {
-      // await api.post("/notes", {
-      //   title,
-      //   content,
-      // });
-
       const note = { title, content };
       await createNote(note);
       toast.success("Note created successfully!");

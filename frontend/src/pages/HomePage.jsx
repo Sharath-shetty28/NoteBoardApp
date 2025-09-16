@@ -5,11 +5,13 @@ import toast from "react-hot-toast";
 import NoteCard from "../components/NoteCard";
 import NotesNotFound from "../components/NotesNotFound";
 import { fetchNotes } from "../noteService";
+import { useAuth } from "../AuthContext";
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { authUser, logout } = useAuth();
 
   useEffect(() => {
     const loadNotes = async () => {
@@ -33,6 +35,8 @@ const HomePage = () => {
     loadNotes();
   }, []);
 
+  if (!authUser) return <p>You are not logged in</p>;
+
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -45,6 +49,8 @@ const HomePage = () => {
         )}
 
         {notes.length === 0 && !isRateLimited && <NotesNotFound />}
+        <h1>Welcome {authUser.username}</h1>
+        <button onClick={logout}>Logout</button>
 
         {notes.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
