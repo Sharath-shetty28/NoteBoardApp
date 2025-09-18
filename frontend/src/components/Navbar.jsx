@@ -52,7 +52,7 @@ const Navbar = () => {
               <PlusIcon className="size-5" />
               <span>New Note</span>
             </Link>
-            {authUser && <button onClick={logout}>Logout</button>}
+            {authUser && <button className="btn btn-info" onClick={logout}>Logout</button>}
           </div>
         </div>
       </div>

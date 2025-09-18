@@ -50,7 +50,6 @@ export const authUser = (req, res, next) => {
       return res.status(401).json({ message: "Token is not valid" });
     }
     req.user = { id: decoded.id };
-    console.log("Authenticated user ID:", req.user.id);
     next();
   } catch (err) {
     console.error("Auth error:", err.message);

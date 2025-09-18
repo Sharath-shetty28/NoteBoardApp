@@ -9,10 +9,12 @@ import {
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { NotebookIcon, Eye, EyeOff } from "lucide-react";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login, isLoggingIn } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -37,7 +39,7 @@ function LoginPage() {
       navigate("/");
       toast.success("Logged in successfully!");
     } else {
-      toast.error("Login  failed");
+      toast.error(result.message || "Please try again");
     }
 
     setFormData({ email: "", password: "" });
@@ -52,7 +54,7 @@ function LoginPage() {
             <div className="w-full max-w-md">
               {/* HEADING TEXT */}
               <div className="text-center mb-8">
-                <MessageCircleIcon className="w-12 h-12 mx-auto text-slate-400 mb-4" />
+                <NotebookIcon className="w-12 h-12 mx-auto text-slate-400 mb-4" />
                 <h2 className="text-2xl font-bold text-slate-200 mb-2">
                   Welcome Back
                 </h2>
@@ -87,13 +89,33 @@ function LoginPage() {
                     <LockIcon className="auth-input-icon" />
 
                     <input
+                      aria-label="Password"
+                      autoComplete="current-password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       value={formData.password}
                       onChange={handleChange}
                       className="input"
                       placeholder="Enter your password"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((s) => !s)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
+                      aria-pressed={showPassword}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                    >
+                      {/* Eye icon when hidden; eye-off when visible */}
+                      {showPassword ? (
+                        // eye-off / closed eye
+                        <EyeOff />
+                      ) : (
+                        // eye / open eye
+                        <Eye />
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -123,13 +145,13 @@ function LoginPage() {
           <div className="hidden md:w-1/2 md:flex items-center justify-center p-6 bg-gradient-to-bl from-slate-800/20 to-transparent">
             <div>
               <img
-                src="/login.png"
+                src="/login.webp"
                 alt="People using mobile devices"
                 className="w-full h-auto object-contain"
               />
               <div className="mt-6 text-center">
                 <h3 className="text-xl font-medium text-cyan-400">
-                  Connect anytime, anywhere
+                  Plan anytime, anywhere
                 </h3>
 
                 <div className="mt-4 flex justify-center gap-4">
@@ -146,39 +168,3 @@ function LoginPage() {
   );
 }
 export default LoginPage;
-
-// // src/pages/Login.jsx
-// import { useState } from "react";
-// import { useAuth } from "../AuthContext";
-
-// export default function Login() {
-//   const { login } = useAuth();
-//   const [form, setForm] = useState({ email: "", password: "" });
-
-//   const handleChange = (e) =>
-//     setForm({ ...form, [e.target.name]: e.target.value });
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     login(form);
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <h2>Login</h2>
-//       <input
-//         name="email"
-//         type="email"
-//         placeholder="Email"
-//         onChange={handleChange}
-//       />
-//       <input
-//         name="password"
-//         type="password"
-//         placeholder="Password"
-//         onChange={handleChange}
-//       />
-//       <button type="submit">Login</button>
-//     </form>
-//   );
-// }
