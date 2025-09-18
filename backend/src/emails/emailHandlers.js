@@ -16,7 +16,7 @@ export async function sendWelcomeEmail(to) {
       to,
       subject: "Welcome to NoteBoardApp 🎉",
       html: `
-      <div style="font-family: Arial, sans-serif; background-color: #7480FF; padding: 30px;">
+      <div style="font-family: Arial, sans-serif; background-color: #0F172A; padding: 30px;">
     <div style="max-width: 600px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
       
       <!-- Header -->
