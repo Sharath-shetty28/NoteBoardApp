@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import {
-  MessageCircleIcon,
-  MailIcon,
-  LoaderIcon,
-  LockIcon,
-} from "lucide-react";
+import { MailIcon, LoaderIcon, LockIcon } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";

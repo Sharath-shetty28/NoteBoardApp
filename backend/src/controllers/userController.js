@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 //Function for register a new user
 export const signup = async (req, res) => {
   try {
@@ -38,20 +38,32 @@ export const signup = async (req, res) => {
 
     const user = await User.create({ name, email, password: hashedPassword });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
 
-    res.cookie("token", token, {
-      httpOnly: true, //Prevent javascript to access cookie
-      secure: process.env.NODE_ENV === "production", //Use secure cookies in production
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", //CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, //Cookie expiration time
-    });
-    return res.json({
-      success: true,
-      user: { email: user.email, name: user.name },
-    });
+      res.cookie("token", token, {
+        httpOnly: true, //Prevent javascript to access cookie
+        secure: process.env.NODE_ENV === "production", //Use secure cookies in production
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", //CSRF protection
+        maxAge: 7 * 24 * 60 * 60 * 1000, //Cookie expiration time
+      });
+      
+      try {
+       await sendWelcomeEmail(user.email);
+
+      } catch (error) {
+        console.error("Failed to send welcome email:", error);
+      }
+      return res.json({
+        success: true,
+        user: { email: user.email, name: user.name },
+      });
+
+    } else {
+      res.status(400).json({ message: "Invalid user data" });
+    }
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
@@ -121,7 +133,7 @@ export const isAuth = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
-    
+
     return res.json({ success: true, user });
   } catch (error) {
     console.log(error.message);
