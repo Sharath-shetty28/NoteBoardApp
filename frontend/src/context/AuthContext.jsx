@@ -50,12 +50,11 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post("/auth/login", data, {
         withCredentials: true,
       });
-      console.log("Login response:", res.data);
       if (res.data.success) {
         setAuthUser(res.data.user);
         return { success: true };
       }
-      return { success: false , message: res.data.message };
+      return { success: false, message: res.data.message };
     } catch (err) {
       console.log("Login error:", err);
       return { success: false, message: err.message || "Login failed" };

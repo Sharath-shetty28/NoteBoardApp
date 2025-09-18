@@ -1,36 +1,12 @@
 import { Link } from "react-router";
 import { PlusIcon } from "lucide-react";
-import { syncAllNotes } from "../noteService";
-import toast from "react-hot-toast";
+// import { syncAllNotes } from "../noteService";
+// import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const isPWA =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone;
 
   const { authUser, logout } = useAuth();
-
-  const handleSync = async (e) => {
-    e.preventDefault();
-    if (!navigator.onLine) {
-      toast.error(
-        "You are currently offline. Please connect to the internet to sync notes."
-      );
-      return;
-    }
-    if (!window.confirm("Are you sure you want to sync this note?")) return;
-
-    try {
-      toast.promise(syncAllNotes(), {
-        loading: "Syncing all notes...",
-        success: "All notes synced successfully!",
-        error: "Error syncing notes:",
-      });
-    } catch (err) {
-      toast.error("Error syncing notes:", err);
-    }
-  };
 
   return (
     <header className="bg-base-300 border-b border-base-content/10">
@@ -40,14 +16,7 @@ const Navbar = () => {
             NoteBoardApp
           </h1>
           <div className="flex items-center gap-4">
-            {isPWA && (
-              <button
-                onClick={(e) => handleSync(e)}
-                className="btn btn-primary"
-              >
-                Sync All Notes
-              </button>
-            )}
+           
             <Link to={"/create"} className="btn btn-primary">
               <PlusIcon className="size-5" />
               <span>New Note</span>

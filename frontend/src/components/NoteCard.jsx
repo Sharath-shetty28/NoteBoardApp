@@ -1,44 +1,11 @@
 import { PenSquareIcon, Trash2Icon } from "lucide-react";
 import { Link } from "react-router";
 import { formatDate } from "../lib/utils";
-import { deleteNote, syncOfflineNotes } from "../noteService";
+import { deleteNote } from "../noteService";
 
 import toast from "react-hot-toast";
 
 const NoteCard = ({ note, setNotes }) => {
-  const isPWA =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone;
-
-  const handleSync = async (e, id) => {
-    e.preventDefault();
-    if (!navigator.onLine) {
-      toast.error(
-        "You are currently offline. Please connect to the internet to sync notes."
-      );
-      return;
-    }
-
-    if (note.synconly) {
-      console.log("local");
-    }
-    if (note.localonly && !note.synced) {
-      toast.error("Note is already synced");
-      return;
-    }
-
-    if (!window.confirm("Are you sure you want to sync this note?")) return;
-    try {
-      toast.promise(syncOfflineNotes(id), {
-        loading: "Syncing note...",
-        success: "Note synced successfully",
-        error: "Failed to sync note",
-      });
-    } catch (err) {
-      toast.error("❌ Sync failed:", err);
-    }
-  };
-
   const handleDelete = async (e, id) => {
     e.preventDefault(); // get rid of the navigation behaviour
 
@@ -74,15 +41,6 @@ const NoteCard = ({ note, setNotes }) => {
             {formatDate(new Date(note.createdAt))}
           </span>
           <div className="flex items-center gap-1">
-            {isPWA && (
-              <button
-                onClick={(e) => handleSync(e, note._id || note.id)}
-                className="btn btn-ghost btn-xs"
-              >
-                Sync Notes
-              </button>
-            )}
-
             <PenSquareIcon className="size-4" />
             <button
               className="btn btn-ghost btn-xs text-error"
