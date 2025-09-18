@@ -8,7 +8,7 @@ import {
 } from "./idb";
 
 let isSyncing = false;
-
+const ENDPOINT = "/notes";
 export async function syncAllNotes() {
   if (!navigator.onLine || isSyncing) return;
 
@@ -47,8 +47,6 @@ export async function syncOfflineNotes(id) {
     console.error("❌ Failed to sync note:", err);
   }
 }
-
-const ENDPOINT = "/notes";
 
 // Fetch all notes
 export async function fetchNotes() {

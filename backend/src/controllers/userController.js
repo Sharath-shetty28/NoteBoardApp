@@ -11,6 +11,24 @@ export const signup = async (req, res) => {
       return res.json({ success: false, message: "Missing Details" });
     }
 
+    if (name.length < 3) {
+      return res.json({
+        success: false,
+        message: "Name must be at least 3 characters long",
+      });
+    }
+
+    if (email.indexOf("@") === -1) {
+      return res.json({ success: false, message: "Invalid Email" });
+    }
+
+    if (password.length < 6) {
+      return res.json({
+        success: false,
+        message: "Password must be at least 6 characters long",
+      });
+    }
+
     const existingUser = await User.findOne({ email });
 
     if (existingUser)
@@ -52,7 +70,18 @@ export const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    if (email.indexOf("@") === -1) {
+      return res.json({ success: false, message: "Invalid Email" });
+    }
+
+    if (password.length < 6) {
+      return res.json({
+        success: false,
+        message: "Password must be at least 6 characters long",
+      });
+    }
+
+    const user = await User.findOne({ email }).select("+password");;
 
     if (!user) {
       return res.json({ success: false, message: "Invalid Email or Password" });
@@ -67,7 +96,6 @@ export const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -85,8 +113,6 @@ export const login = async (req, res) => {
   }
 };
 
-//Check Auth: /api/user/is-auth
-
 export const isAuth = async (req, res) => {
   try {
     const userId = req.userId;
@@ -97,8 +123,6 @@ export const isAuth = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-
-//Logout User: /api/user/logout
 
 export const logout = async (req, res) => {
   try {

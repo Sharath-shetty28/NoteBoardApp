@@ -107,6 +107,8 @@ const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -114,7 +116,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await api.get("/auth/check");
+        const res = await api.get("/auth/is-auth");
         setAuthUser(res.data);
       } catch (err) {
         setAuthUser(null);
@@ -126,6 +128,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signup = async (data) => {
+    setIsSigningUp(true);
     try {
       const res = await api.post("/auth/signup", data);
       setAuthUser(res.data);
@@ -136,6 +139,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (data) => {
+    setIsLoggingIn(true);
     try {
       const res = await api.post("/auth/login", data);
       setAuthUser(res.data);
@@ -156,7 +160,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authUser, loading, signup, login, logout }}>
+    <AuthContext.Provider value={{ authUser, loading, signup, login, logout, isSigningUp, isLoggingIn }}>
       {children}
     </AuthContext.Provider>
   );

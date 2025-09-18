@@ -35,7 +35,7 @@ const HomePage = () => {
     loadNotes();
   }, []);
 
-  if (!authUser) return <p>You are not logged in</p>;
+  // if (!authUser) return <p>You are not logged in</p>;
 
   return (
     <div className="min-h-screen">
@@ -49,7 +49,7 @@ const HomePage = () => {
         )}
 
         {notes.length === 0 && !isRateLimited && <NotesNotFound />}
-        <h1>Welcome {authUser.username}</h1>
+        {/* <h1>Welcome {authUser.username}</h1> */}
         <button onClick={logout}>Logout</button>
 
         {notes.length > 0 && !isRateLimited && (
