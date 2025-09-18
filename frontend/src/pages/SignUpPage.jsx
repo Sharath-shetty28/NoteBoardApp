@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../context/AuthContext";
 import {
   MessageCircleIcon,
   LockIcon,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -17,11 +18,13 @@ function SignUpPage() {
     password: "",
   });
   const { signup, isSigningUp } = useAuth();
+
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
@@ -39,7 +42,13 @@ function SignUpPage() {
       return;
     }
 
-    signup(formData);
+    const result = await signup(formData);
+    if (result && result.success) {
+      navigate("/login");
+      toast.success("Account created successfully!");
+    } else {
+      toast.error("Signup failed");
+    }
 
     setFormData({ name: "", email: "", password: "" });
   };

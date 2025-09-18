@@ -2,11 +2,14 @@ import { Link } from "react-router";
 import { PlusIcon } from "lucide-react";
 import { syncAllNotes } from "../noteService";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const isPWA =
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone;
+
+  const { authUser, logout } = useAuth();
 
   const handleSync = async (e) => {
     e.preventDefault();
@@ -49,6 +52,7 @@ const Navbar = () => {
               <PlusIcon className="size-5" />
               <span>New Note</span>
             </Link>
+            {authUser && <button onClick={logout}>Logout</button>}
           </div>
         </div>
       </div>

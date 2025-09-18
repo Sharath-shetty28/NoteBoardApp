@@ -81,7 +81,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email }).select("+password");;
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res.json({ success: false, message: "Invalid Email or Password" });
@@ -115,8 +115,13 @@ export const login = async (req, res) => {
 
 export const isAuth = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.user.id;
     const user = await User.findById(userId).select("-password");
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    
     return res.json({ success: true, user });
   } catch (error) {
     console.log(error.message);
@@ -124,7 +129,7 @@ export const isAuth = async (req, res) => {
   }
 };
 
-export const logout = async (req, res) => {
+export const logout = async (_, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
