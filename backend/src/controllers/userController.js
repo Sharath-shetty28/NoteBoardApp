@@ -4,7 +4,7 @@ import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { generateAccessToken } from "../utils/generateToken.js";
 import { OAuth2Client } from "google-auth-library";
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(process.env.VITE_GOOGLE_CLIENT_ID);
 
 export const googleLogin = async (req, res) => {
   try {
