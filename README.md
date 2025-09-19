@@ -10,7 +10,7 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 * Responsive Design: Optimized for 100% of screen sizes, including mobile, tablet, and desktop.
 * PWA Installable: Progressive Web App installable with <1s load time for quick access.
 * JWT Authentication: Secures 100% of API endpoints with JSON Web Tokens.
-* SSO Login: Supports 3+ major providers (Google, GitHub, Microsoft) for quick user sign-in.
+* SSO Login: Supports Google Sign-in  for quick user sign-in.
 * Welcome Email: Automatically sends emails to 100% of new users upon signup.
 * API Rate Limiting: Limits API calls to 100 requests per 15 minutes per user using Upstash Redis.
 * Clean Folder Structure: Organized into <10 main folders, ensuring maintainable and scalable code.
@@ -178,7 +178,7 @@ notesboardapp/
 
 ## API endpoints (suggested)
 
-* * `POST /api/auth/signup` - create a new user
+* `POST /api/auth/signup` - create a new user
 * `POST /api/auth/login` - login to existing account
 * `POST /api/auth/google-login` - login using a Google account
 * `GET /api/auth/is-auth` - validating a user
