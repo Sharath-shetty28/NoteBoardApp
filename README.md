@@ -20,6 +20,7 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 ## Demo
 
 <img width="1456" height="827" alt="image" src="https://github.com/user-attachments/assets/be5b7527-be48-4101-b813-f6e8d9023d95" />
+<img width="1919" height="876" alt="image" src="https://github.com/user-attachments/assets/77f60de0-9156-4000-8c79-332b4e1df647" />
 
 
 ---
