@@ -29,9 +29,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (data) => {
     setIsSigningUp(true);
     try {
-      const res = await api.post("/auth/signup", data, {
-        withCredentials: true,
-      });
+      const res = await api.post("/auth/signup", data);
       if (!res.data.success) {
         return { success: false, message: res.data.message };
       }
@@ -47,9 +45,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     setIsLoggingIn(true);
     try {
-      const res = await api.post("/auth/login", data, {
-        withCredentials: true,
-      });
+      const res = await api.post("/auth/login", data);
       if (res.data.success) {
         setAuthUser(res.data.user);
         return { success: true };
