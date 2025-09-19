@@ -134,8 +134,15 @@ function LoginPage() {
                   Don't have an account? Sign Up
                 </Link>
                 <p className="m-2">OR</p>
-                <GoogleSignInButton className="w-full rounded" />
               </div>
+              <GoogleSignInButton className="w-full" style={{
+                background: "#ffffff",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "3px",
+                height: "46px"
+              }} />
             </div>
           </div>
 
