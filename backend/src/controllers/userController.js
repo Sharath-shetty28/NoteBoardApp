@@ -1,8 +1,70 @@
 import User from "../models/User.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { sendWelcomeEmail } from "../emails/emailHandlers.js";
 import { generateAccessToken } from "../utils/generateToken.js";
+import { OAuth2Client } from "google-auth-library";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Token is required" });
+    }
+    const response = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const { email_verified, name, email } = response.payload;
+    if (email_verified) {
+      let user = await User.findOne({ email });
+      if (user) {
+        const token = generateAccessToken(user._id, user.name, user.email);
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        return res.json({
+          success: true,
+          message: "User is logged in",
+          user: { email: user.email, name: user.name },
+        });
+      } else {
+        let password = email + process.env.JWT_SECRET;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user = await User.create({ name, email, password: hashedPassword });
+        if (user) {
+          try {
+            await sendWelcomeEmail(user.email);
+          } catch (error) {
+            console.error("Failed to send welcome email:", error);
+          }
+          const token = generateAccessToken(user._id, user.name, user.email);
+          res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+          return res.json({
+            success: true,
+            message: "User created and logged in successfully",
+            user: { email: user.email, name: user.name },
+          });
+        }
+      }
+    }
+  } catch (error) {
+    // console.log(error.message);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 //Function for register a new user
 export const signup = async (req, res) => {
   try {
@@ -128,7 +190,7 @@ export const isAuth = async (req, res) => {
   }
 };
 
-export const logout = async (_, res) => {
+export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,

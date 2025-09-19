@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { NotebookIcon, Eye, EyeOff } from "lucide-react";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -132,6 +133,8 @@ function LoginPage() {
                 <Link to="/signup" className="auth-link">
                   Don't have an account? Sign Up
                 </Link>
+                <p className="m-2">OR</p>
+                <GoogleSignInButton className="w-full rounded" />
               </div>
             </div>
           </div>

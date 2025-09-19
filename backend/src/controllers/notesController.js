@@ -18,7 +18,7 @@ export async function getNoteById(req, res) {
       _id: req.params.id,
       user: req.user.id,
     }).populate("user", "name");
-    
+
     if (!note) return res.status(404).json({ message: "Note not found!" });
     res.status(200).json(note);
   } catch (error) {
