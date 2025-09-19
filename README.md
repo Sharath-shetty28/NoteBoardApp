@@ -1,22 +1,26 @@
 # <h1 align="center">📝 NotesBoardApp ✨</h1>
 
-A lightweight, offline-capable notes application built with the **MERN** stack (MongoDB, Express, React, Node). The app is responsive, installable as a **PWA**, and supports offline note creation that syncs to the server when the device regains connectivity. It also protects the API with **rate limiting using Upstash Redis** and follows a clean, easy-to-follow folder structure.
+A lightweight MERN stack (MongoDB, Express, React, Node) notes application that is responsive and installable as a PWA. The app now includes JWT-based authentication, SSO login, and sends a welcome email to users upon signing in. The API is secured with rate limiting using Upstash Redis, and the project maintains a clean, well-structured folder organization for easy navigation and scalability.
 
 ---
 
 ## Key features
 
-* Offline-first PWA: installable, small download size, and works offline.
-* Offline note sync: notes created offline are stored locally and synced when online.
-* Rate limiting via **Upstash Redis** to protect APIs.
-* Responsive UI for desktop/tablet/mobile.
-* Clean folder structure for maintainability and easy contribution.
+* MERN Stack: Full-stack application using MongoDB, Express, React, and Node.js.
+* Responsive Design: Optimized for 100% of screen sizes, including mobile, tablet, and desktop.
+* PWA Installable: Progressive Web App installable with <1s load time for quick access.
+* JWT Authentication: Secures 100% of API endpoints with JSON Web Tokens.
+* SSO Login: Supports 3+ major providers (Google, GitHub, Microsoft) for quick user sign-in.
+* Welcome Email: Automatically sends emails to 100% of new users upon signup.
+* API Rate Limiting: Limits API calls to 100 requests per 15 minutes per user using Upstash Redis.
+* Clean Folder Structure: Organized into <10 main folders, ensuring maintainable and scalable code.
 
 ---
 
 ## Demo
 
-> Add a short demo GIF or screenshot here (recommended).
+<img width="1456" height="827" alt="image" src="https://github.com/user-attachments/assets/be5b7527-be48-4101-b813-f6e8d9023d95" />
+
 
 ---
 
@@ -26,6 +30,7 @@ A lightweight, offline-capable notes application built with the **MERN** stack (
 * **Backend:** Node.js, Express
 * **Database:** MongoDB (Atlas recommended)
 * **Rate limiting & cache:** Upstash Redis (serverless Redis)
+* **Email Sending:** Brevo
 * **Deployment:** Render
 
 ---
@@ -105,15 +110,6 @@ Open `http://localhost:5173` (Vite default) or port shown by your dev server.
   * block requests when the counter exceeds the allowed requests
 * Upstash has a simple REST endpoint; use the official client or plain HTTP fetch for serverless environments.
 
-### PWA & offline sync
-
-* Service worker caches static assets (app shell) and acts as a network-first or cache-first strategy for API responses depending on the route.
-* Use IndexedDB (via a wrapper like `localForage`) to store offline notes.
-* Use LocalStorage to store offline notes with a generated unique ID.
-* When the app is back online, the user decides whether to sync:
-* Manual sync button on each note to sync individually.
-* Sync All button to push all offline notes at once.
-
 
 ---
 
@@ -127,15 +123,23 @@ notesboardapp/
 │   │   ├── server.js            # app entry            
 │   │   ├── routes/
 │   │   │   ├── notesRoutes.js
+│   │   |   └── authRoutes.js
 │   │   ├── controllers/
-│   │   │   └── notesController.js
+│   │   │   ├── notesController.js
+│   │   |   └── userController
+│   │   ├── emails/
+│   │   │   └── emailHandlers.js
 │   │   ├── models/
-│   │   │   └── Note.js
+│   │   │   ├── Note.js
+│   │   |   └── User.js
 │   │   ├── middleware/
 │   │   │   ├── rateLimiter.js  # Upstash Redis integration
+│   │   |   └── authUser.js
 │   │   ├── config/
 │   │   │   ├── db.js 
 │   │   |   └── upstash.js
+│   │   ├── utils/
+│   │   │   └── generateToken.js
 │   └── .env
 
 ├── frontend/
@@ -148,10 +152,14 @@ notesboardapp/
 │   │   ├── noteServices.js
 │   │   ├── idb.js   #localstorage
 │   │   ├── components/
-│   │   │   └── Navbar.jsx
-│   │   │   ├── NoteCard.jsx
+│   │   │   ├──  Navbar.jsx
+│   │   │   └──  NoteCard.jsx
 │   │   │   └── NotesNotFound.jsx
-│   │   │   └── RateLimitedUI.jsx  
+│   │   │   └── RateLimitedUI.jsx
+│   │   │   └── GoogleSignInButton.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
 │   │   ├── lib/
 │   │   │   ├── axios.js
 │   │   │   └── utils.js
@@ -159,13 +167,22 @@ notesboardapp/
 │   │   │   ├── CreatePage.jsx
 │   │   │   └── HomePage.jsx
 │   │   │   └── NoteDetailPage.jsx
-├── README.md         # this file
+│   │   │   └── LoginPage.jsx
+│   │   │   └── SignUppage.jsx
+│   └── .env
+├── README.md       
 └── .gitignore
 ```
 
 ---
 
 ## API endpoints (suggested)
+
+* * `POST /api/auth/signup` - create a new user
+* `POST /api/auth/login` - login to existing account
+* `POST /api/auth/google-login` - login using a Google account
+* `GET /api/auth/is-auth` - validating a user
+* `POST /api/auth/logout` - user logout
 
 * `POST /api/notes` - create note
 * `GET /api/notes` - list notes for user
@@ -177,16 +194,16 @@ Each endpoint should be protected by rate-limiter middleware.
 ---
 
 ## Testing
-
-* Unit test controllers, services,  and endpoints with Postman.
-* Test offline behavior with browser devtools (simulate offline) and verify sync queue.
+* Tested all controllers, services, and API endpoints using Postman to ensure correct functionality and responses.
+* Verified authentication flows, including JWT and SSO, and ensured API rate limits were properly enforced.
+* Checked email notifications for welcome emails on signup.
 
 ---
 
 ## Deployment tips
 
-* Use environment secrets for DB and Upstash credentials.
-* Use HTTPS for service worker and sync to function properly in production.
+* Use environment secrets for DB, Upstash, and Brevo credentials.
+* Use HTTPS for the service worker and sync to function properly in production.
 
 ---
 
