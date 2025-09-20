@@ -177,7 +177,7 @@ export const login = async (req, res) => {
 export const isAuth = async (req, res) => {
   try {
     const userId = req.user.id;
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).select("-password -__v");
     if (!user)
       return res
         .status(404)

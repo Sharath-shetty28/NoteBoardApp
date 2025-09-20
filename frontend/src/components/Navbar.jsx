@@ -3,7 +3,7 @@ import { PlusIcon } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const { authUser, logout } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <header
@@ -14,7 +14,7 @@ const Navbar = () => {
     >
       <div className="mx-auto max-w-6xl p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-primary font-mono tracking-tight">
+          <h1 className="text-2xl font-bold text-primary font-mono tracking-tight md:text-4xl">
             NoteBoardApp
           </h1>
           <div className="flex items-center gap-4">
@@ -22,11 +22,10 @@ const Navbar = () => {
               <PlusIcon className="size-5" />
               <span>New Note</span>
             </Link>
-            {authUser && (
-              <button className="btn btn-info" onClick={logout}>
-                Logout
-              </button>
-            )}
+
+            <button className="btn btn-info md:btn-info" onClick={logout}>
+              Logout
+            </button>
           </div>
         </div>
       </div>

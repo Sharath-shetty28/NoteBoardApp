@@ -10,17 +10,20 @@ export const AuthProvider = ({ children }) => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [authUser, setAuthUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const start = Date.now();
   // check if user already logged in
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await api.get("/auth/is-auth");
-        setAuthUser(res.data);
+        const res = await api.get("/auth/is-auth", { withCredentials: true });
+        if (res.data.success) setAuthUser(res.data.user);
+        else setAuthUser(null);
       } catch (err) {
         setAuthUser(null);
       } finally {
-        setLoading(false);
+        const elapsed = Date.now() - start;
+        const delay = Math.max(1000 - elapsed, 0); // 1s minus elapsed
+        setTimeout(() => setLoading(false), delay);
       }
     };
     checkAuth();

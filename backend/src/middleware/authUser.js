@@ -1,4 +1,3 @@
-
 import jwt from "jsonwebtoken";
 
 export const authUser = (req, res, next) => {
