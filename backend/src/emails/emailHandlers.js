@@ -53,3 +53,31 @@ export async function sendWelcomeEmail(to) {
     console.error("❌ Failed to send welcome email:", err);
   }
 }
+
+export async function sendPasswordResetEmail(to, resetLink) {
+  const transporter = nodemailer.createTransport({
+    host: process.env.BREVO_HOST,
+    port: process.env.BREVO_PORT,
+    auth: {
+      user: process.env.BREVO_USER,
+      pass: process.env.BREVO_PASS,
+    },
+  });
+
+  try {
+    await transporter.sendMail({
+      from: '"NoteBoardApp" <anuguru8888@gmail.com>',
+      to,
+      subject: "Password Reset",
+      html: `
+        <div style="font-family: Arial, sans-serif;">
+          <h2>Password Reset Request</h2>
+          <p>You requested a password reset. Click the link below to reset your password:</p>
+          <a href="${resetLink}">${resetLink}</a>
+        </div>
+      `,
+    });
+  } catch (err) {
+    console.error("❌ Failed to send password reset email:", err);
+  }
+}

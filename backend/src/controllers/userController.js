@@ -1,8 +1,12 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import {
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+} from "../emails/emailHandlers.js";
 import { generateAccessToken } from "../utils/generateToken.js";
 import { OAuth2Client } from "google-auth-library";
+import crypto from "crypto";
 
 const client = new OAuth2Client(process.env.VITE_GOOGLE_CLIENT_ID);
 
@@ -202,5 +206,57 @@ export const logout = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.json({ success: false, message: error.message });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Generate token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+    await user.save();
+
+    // Send email with link
+    // const resetUrl = `https://noteboardapp.onrender.com/reset-password/${resetToken}`;
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    await sendPasswordResetEmail(user.email, resetUrl);
+
+    res.json({ message: "Reset link sent to email" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user)
+      return res.status(400).json({ message: "Invalid or expired token" });
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
   }
 };
