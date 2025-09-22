@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { NotebookIcon, Eye, EyeOff } from "lucide-react";
 import GoogleSignInButton from "../components/GoogleSignInButton";
+import ForgotPassword from "../components/ForgotPassword";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -133,16 +134,22 @@ function LoginPage() {
                 <Link to="/signup" className="auth-link">
                   Don't have an account? Sign Up
                 </Link>
+                <Link to="/forgot-password" className="auth-link">
+                  Forgot your password?
+                </Link>
                 <p className="m-2">OR</p>
               </div>
-              <GoogleSignInButton className="w-full" style={{
-                background: "#ffffff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "3px",
-                height: "46px"
-              }} />
+              <GoogleSignInButton
+                className="w-full"
+                style={{
+                  background: "#ffffff",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: "3px",
+                  height: "46px",
+                }}
+              />
             </div>
           </div>
 
