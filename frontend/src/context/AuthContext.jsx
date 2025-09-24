@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
@@ -26,12 +26,15 @@ export const AuthProvider = ({ children }) => {
             location.pathname === "/signup"
           ) {
             navigate("/"); // redirect to home/dashboard
+            setLoading(false);
           }
         } else {
           setAuthUser(null);
+          setLoading(false);
         }
       } catch (err) {
         setAuthUser(null);
+        setLoading(false);
       } finally {
         const elapsed = Date.now() - start;
         const delay = Math.max(1000 - elapsed, 0); // 1s minus elapsed
