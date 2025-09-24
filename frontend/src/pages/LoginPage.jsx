@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { NotebookIcon, Eye, EyeOff } from "lucide-react";
 import GoogleSignInButton from "../components/GoogleSignInButton";
-import ForgotPassword from "../components/ForgotPassword";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -67,7 +66,6 @@ function LoginPage() {
                   <label className="auth-input-label">Email</label>
                   <div className="relative">
                     <MailIcon className="auth-input-icon" />
-
                     <input
                       name="email"
                       type="email"
@@ -84,7 +82,6 @@ function LoginPage() {
                   <label className="auth-input-label">Password</label>
                   <div className="relative">
                     <LockIcon className="auth-input-icon" />
-
                     <input
                       aria-label="Password"
                       autoComplete="current-password"
@@ -130,11 +127,14 @@ function LoginPage() {
                 </button>
               </form>
 
-              <div className="mt-6 text-center">
+              <div className="mt-6 text-center gap-2 ">
                 <Link to="/signup" className="auth-link">
                   Don't have an account? Sign Up
                 </Link>
-                <Link to="/forgot-password" className="auth-link">
+                <Link
+                  to="/forgot-password"
+                  className="p-6 text-base  text-slate-400 hover:text-white underline"
+                >
                   Forgot your password?
                 </Link>
                 <p className="m-2">OR</p>

@@ -225,13 +225,15 @@ export const forgotPassword = async (req, res) => {
     await user.save();
 
     // Send email with link
-    // const resetUrl = `https://noteboardapp.onrender.com/reset-password/${resetToken}`;
-    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+    const resetUrl = `https://noteboardapp.onrender.com/reset-password/${resetToken}`;
+    // const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
     await sendPasswordResetEmail(user.email, resetUrl);
 
-    res.json({ message: "Reset link sent to email" });
+    res.json({ success: true, message: "Reset link sent to email" });
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: error.message });
   }
 };
 
@@ -248,15 +250,15 @@ export const resetPassword = async (req, res) => {
     });
 
     if (!user)
-      return res.status(400).json({ message: "Invalid or expired token" });
-
-    if (req.body.password.length < 6) {
       return res
         .status(400)
-        .json({
-          success: false,
-          message: "Password must be at least 6 characters long",
-        });
+        .json({ success: false, message: "Invalid or expired link" });
+
+    if (req.body.password.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters long",
+      });
     }
 
     const salt = await bcrypt.genSalt(10);

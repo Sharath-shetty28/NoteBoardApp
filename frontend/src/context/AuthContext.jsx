@@ -1,11 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
+import { useNavigate,useLocation } from "react-router-dom";
 
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [authUser, setAuthUser] = useState(null);
@@ -16,8 +19,17 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       try {
         const res = await api.get("/auth/is-auth", { withCredentials: true });
-        if (res.data.success) setAuthUser(res.data.user);
-        else setAuthUser(null);
+        if (res.data.success) {
+          setAuthUser(res.data.user);
+          if (
+            location.pathname === "/login" ||
+            location.pathname === "/signup"
+          ) {
+            navigate("/"); // redirect to home/dashboard
+          }
+        } else {
+          setAuthUser(null);
+        }
       } catch (err) {
         setAuthUser(null);
       } finally {
@@ -26,8 +38,12 @@ export const AuthProvider = ({ children }) => {
         setTimeout(() => setLoading(false), delay);
       }
     };
-    checkAuth();
-  }, []);
+    if (location.pathname !== "/login" && location.pathname !== "/signup") {
+      checkAuth();
+    } else {
+      setLoading(false);
+    }
+  }, [location.pathname, navigate]);
 
   const signup = async (data) => {
     setIsSigningUp(true);
