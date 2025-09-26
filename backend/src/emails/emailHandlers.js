@@ -47,7 +47,7 @@ export async function sendWelcomeEmail(name, to) {
 
 export async function sendPasswordResetEmail(to, resetLink) {
   try {
-    await transporter.sendMail({
+    await resend.emails.send({
       from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to,
       subject: "Password Reset",
