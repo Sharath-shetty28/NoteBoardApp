@@ -23,7 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "mern-noteboardapp": "file:..",
     "mongoose": "^8.14.3",
-    "nodemailer": "^7.0.6"
+    "nodemailer": "^7.0.6",
+    "resend": "^6.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

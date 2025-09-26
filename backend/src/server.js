@@ -38,17 +38,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
   });
 }
-app.get("/test-brevo", (req, res) => {
-  https
-    .get("https://api.sendinblue.com/v3/account", (response) => {
-      let data = "";
-      response.on("data", (chunk) => (data += chunk));
-      response.on("end", () => res.send(`✅ Brevo reachable: ${data}`));
-    })
-    .on("error", (err) => {
-      res.status(500).send(`❌ Brevo not reachable: ${err.message}`);
-    });
-});
 
 app.get("/", (req, res) => {
   res.send("API running in development 🚀");
