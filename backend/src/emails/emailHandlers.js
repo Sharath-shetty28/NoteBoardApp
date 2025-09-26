@@ -1,24 +1,15 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendWelcomeEmail(to) {
-  const transporter = nodemailer.createTransport({
-    host: process.env.BREVO_HOST,
-    port: process.env.BREVO_PORT,
-    auth: {
-      user: process.env.BREVO_USER,
-      pass: process.env.BREVO_PASS,
-    },
-  });
-
+export async function sendWelcomeEmail(name, to) {
   try {
-    await transporter.sendMail({
-      from: '"NoteBoardApp" <anuguru8888@gmail.com>',
+    await resend.emails.send({
+      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to,
       subject: "Welcome to NoteBoardApp 🎉",
       html: `
       <div style="font-family: Arial, sans-serif; background-color: #0F172A; padding: 30px;">
     <div style="max-width: 600px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-      
       <!-- Header -->
       <div style="background: #7480FF; color: white; text-align: center; padding: 20px;">
         <h1 style="margin: 0;">👋 Welcome to NoteBoardApp</h1>
@@ -26,7 +17,7 @@ export async function sendWelcomeEmail(to) {
 
       <!-- Body -->
       <div style="padding: 25px; color: #333;">
-        <p>Hi there,</p>
+        <p>Hi ${name},</p>
         <p>We’re super excited to have you onboard 🎉</p>
         <p>With <strong>NoteBoardApp</strong>, you can organize your notes, ideas, and projects all in one place.</p>
 
@@ -55,18 +46,9 @@ export async function sendWelcomeEmail(to) {
 }
 
 export async function sendPasswordResetEmail(to, resetLink) {
-  const transporter = nodemailer.createTransport({
-    host: process.env.BREVO_HOST,
-    port: process.env.BREVO_PORT,
-    auth: {
-      user: process.env.BREVO_USER,
-      pass: process.env.BREVO_PASS,
-    },
-  });
-
   try {
     await transporter.sendMail({
-      from: '"NoteBoardApp" <anuguru8888@gmail.com>',
+      from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to,
       subject: "Password Reset",
       html: `
@@ -106,10 +88,8 @@ export async function sendPasswordResetEmail(to, resetLink) {
     <div style="background: #f9fafb; text-align: center; padding: 18px; font-size: 13px; color: #6B7280;">
       © ${new Date().getFullYear()} <strong>NoteBoardApp</strong>. All rights reserved.
     </div>
-
   </div>
 </div>
-
       `,
     });
   } catch (err) {
