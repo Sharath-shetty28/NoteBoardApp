@@ -27,11 +27,11 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 
 ## Tech stack
 
-* **Frontend:** React (Vite or Create React App), Service Worker (Workbox or native), localForage / IndexedDB for offline storage
+* **Frontend:** React (Vite) 
 * **Backend:** Node.js, Express
 * **Database:** MongoDB (Atlas recommended)
 * **Rate limiting & cache:** Upstash Redis (serverless Redis)
-* **Email Sending:** Brevo
+* **Email Sending:** Resend
 * **Deployment:** Render
 
 ---
