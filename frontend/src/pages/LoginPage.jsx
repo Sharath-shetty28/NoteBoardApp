@@ -139,17 +139,9 @@ function LoginPage() {
                 </Link>
                 <p className="m-2">OR</p>
               </div>
-              <GoogleSignInButton
-                className="w-full"
-                style={{
-                  background: "#ffffff",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: "3px",
-                  height: "46px",
-                }}
-              />
+              <div className="w-full" style={{ marginTop: "1rem" }}>
+                <GoogleSignInButton className="w-full " />
+              </div>
             </div>
           </div>
 
