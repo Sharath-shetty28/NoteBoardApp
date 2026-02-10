@@ -7,14 +7,16 @@ import {
   googleLogin,
   forgotPassword,
   resetPassword,
-} from "../controllers/userController.js";
-import authUser from "../middleware/authUser.js";
-import rateLimiter from "../middleware/rateLimiter.js";
+} from "../controllers/user.controller.js";
+import authUser from "../middleware/user.middleware.js";
+import rateLimiter from "../middleware/rateLimiter.middleware.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/signup", rateLimiter, signup);
-userRouter.post("/login", rateLimiter, login);
+userRouter.use(rateLimiter);
+
+userRouter.post("/signup", signup);
+userRouter.post("/login", login);
 userRouter.post("/google-login", googleLogin);
 userRouter.get("/is-auth", authUser, isAuth);
 userRouter.post("/logout", authUser, logout);
