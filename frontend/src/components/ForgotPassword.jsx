@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
-import { MailIcon } from "lucide-react";
+import { Link, MailIcon } from "lucide-react";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -53,7 +53,7 @@ export default function ForgotPassword() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="input "
+                className="input"
               />
             </div>
           </div>

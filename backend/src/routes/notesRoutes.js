@@ -11,10 +11,12 @@ import rateLimiter from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
-router.get("/", authUser, rateLimiter, getAllNotes);
-router.get("/:id", authUser, rateLimiter, getNoteById);
-router.post("/", authUser, rateLimiter, createNote);
-router.put("/:id", authUser, rateLimiter, updateNote);
-router.delete("/:id", authUser, rateLimiter, deleteNote);
+router.use(rateLimiter);
+
+router.get("/", authUser, getAllNotes);
+router.get("/:id", authUser, getNoteById);
+router.post("/", authUser, createNote);
+router.put("/:id", authUser, updateNote);
+router.delete("/:id", authUser, deleteNote);
 
 export default router;
