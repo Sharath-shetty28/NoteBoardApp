@@ -1,4 +1,4 @@
-import * as userRepo from "../repositories/user.repository";
+import * as userRepo from "../repositories/user.repository.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken } from "../utils/generateToken.js";
 import crypto from "crypto";
@@ -25,15 +25,13 @@ export const registerUserService = async (name, email, password) => {
       message: "Password must be at least 6 characters long",
     };
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
-  });
+  const existingUser = await userRepo.findUserByEmailRepo(email);
 
   if (existingUser) return { success: false, message: "User already exists" };
 
   const user = await userRepo.createUserRepo({ name, email, password });
   if (user) await sendWelcomeEmail(name, email);
-  return user;
+  return { success: true, user };
 };
 
 export const loginUserService = async (email, password) => {
@@ -45,9 +43,9 @@ export const loginUserService = async (email, password) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return { success: false, message: "Invalid email or password" };
 
-  const token = generateAccessToken(user.id, user.name, user.email);
+  const token = generateAccessToken(user.id, user.name);
 
-  return { user, token };
+  return { success: true, user, token };
 };
 
 export const isAuthService = async (userId) => {

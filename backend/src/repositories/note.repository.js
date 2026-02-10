@@ -32,18 +32,15 @@ export const getNoteById = (noteId, userId) => {
 export const createNote = (data) => {
   return prisma.note.create({
     data: {
-      ...data,
-      user: {
-        connect: {
-          id: data.userId,
-        },
-      },
+      title: data.title,
+      content: data.content,
+      userId: Number(data.userId),
     },
   });
 };
 
 export const updateNote = (noteId, userId, data) => {
-  return prisma.note.updateMany({
+  return prisma.note.update({
     where: { id: noteId, userId },
     data: {
       ...data,
@@ -51,10 +48,12 @@ export const updateNote = (noteId, userId, data) => {
   });
 };
 
-
 export const deletedNote = (noteId, userId) => {
-  return prisma.note.deleteMany({
-    where: { id: noteId, userId },
+  return prisma.note.delete({
+    where: {
+      id: Number(noteId),
+      userId: Number(userId),
+    },
     include: {
       user: {
         select: {
