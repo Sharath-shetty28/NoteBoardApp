@@ -1,0 +1,112 @@
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "../lib/axios";
+import toast from "react-hot-toast";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const AuthContext = createContext(null);
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = ({ children }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isSigningUp, setIsSigningUp] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [authUser, setAuthUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const start = Date.now();
+  // check if user already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await api.get("/auth/is-auth", { withCredentials: true });
+        if (res.data.success) {
+          setAuthUser(res.data.user);
+          if (
+            location.pathname === "/login" ||
+            location.pathname === "/signup"
+          ) {
+            navigate("/"); // redirect to home/dashboard
+            setLoading(false);
+          }
+        } else {
+          setAuthUser(null);
+          setLoading(false);
+        }
+      } catch (err) {
+        setAuthUser(null);
+        setLoading(false);
+      } finally {
+        const elapsed = Date.now() - start;
+        const delay = Math.max(1000 - elapsed, 0); // 1s minus elapsed
+        setTimeout(() => setLoading(false), delay);
+      }
+    };
+    if (location.pathname !== "/login" && location.pathname !== "/signup") {
+      checkAuth();
+    } else {
+      setLoading(false);
+    }
+  }, [location.pathname, navigate]);
+
+  const signup = async (data) => {
+    setIsSigningUp(true);
+    try {
+      const res = await api.post("/auth/signup", data);
+      if (!res.data.success) {
+        return { success: false, message: res.data.message };
+      }
+      setAuthUser(res.data);
+      return { success: true };
+    } catch (err) {
+      return { success: false, message: err.message || "Signup failed" };
+    } finally {
+      setIsSigningUp(false);
+    }
+  };
+
+  const login = async (data) => {
+    setIsLoggingIn(true);
+    try {
+      const res = await api.post("/auth/login", data);
+      if (res.data.success) {
+        setAuthUser(res.data.user);
+        return { success: true };
+      }
+      return { success: false, message: res.data.message };
+    } catch (err) {
+      console.log("Login error:", err);
+      return { success: false, message: err.message || "Login failed" };
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+      setAuthUser(null);
+      toast.success("Logged out successfully!");
+      return { success: true };
+    } catch (err) {
+      toast.error("Logout failed");
+      return { success: false };
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        authUser,
+        setAuthUser,
+        loading,
+        signup,
+        login,
+        logout,
+        isSigningUp,
+        isLoggingIn,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};

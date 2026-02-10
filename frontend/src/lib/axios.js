@@ -20,8 +20,9 @@ const BASE_URL = "/api";
 
 const api = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
-// console.log("🔗 AXIOS BASE URL:", api.defaults.baseURL);
+console.log("API Base URL:", BASE_URL);
 
 export default api;

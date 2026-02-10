@@ -1,54 +1,31 @@
 import { Link } from "react-router";
 import { PlusIcon } from "lucide-react";
-import { syncAllNotes } from "../noteService";
-import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const isPWA =
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.navigator.standalone;
-
-  const handleSync = async (e) => {
-    e.preventDefault();
-    if (!navigator.onLine) {
-      toast.error(
-        "You are currently offline. Please connect to the internet to sync notes."
-      );
-      return;
-    }
-    if (!window.confirm("Are you sure you want to sync this note?")) return;
-
-    try {
-      toast.promise(syncAllNotes(), {
-        loading: "Syncing all notes...",
-        success: "All notes synced successfully!",
-        error: "Error syncing notes:",
-      });
-    } catch (err) {
-      toast.error("Error syncing notes:", err);
-    }
-  };
+  const { logout } = useAuth();
 
   return (
-    <header className="bg-base-300 border-b border-base-content/10">
+    <header
+      style={{
+        background:
+          "repeating-linear-gradient(50deg, #0a2979, transparent 100px)",
+      }}
+    >
       <div className="mx-auto max-w-6xl p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-primary font-mono tracking-tight">
+          <h1 className="text-2xl font-bold text-primary font-mono tracking-tight md:text-4xl">
             NoteBoardApp
           </h1>
           <div className="flex items-center gap-4">
-            {isPWA && (
-              <button
-                onClick={(e) => handleSync(e)}
-                className="btn btn-primary"
-              >
-                Sync All Notes
-              </button>
-            )}
             <Link to={"/create"} className="btn btn-primary">
               <PlusIcon className="size-5" />
               <span>New Note</span>
             </Link>
+
+            <button className="btn btn-info md:btn-info" onClick={logout}>
+              Logout
+            </button>
           </div>
         </div>
       </div>

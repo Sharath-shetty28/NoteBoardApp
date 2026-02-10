@@ -43,7 +43,6 @@ const HomePage = () => {
         {loading && (
           <div className="text-center text-primary py-10">Loading notes...</div>
         )}
-
         {notes.length === 0 && !isRateLimited && <NotesNotFound />}
 
         {notes.length > 0 && !isRateLimited && (
