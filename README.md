@@ -1,12 +1,16 @@
 # <h1 align="center">📝 NotesBoardApp ✨</h1>
 
-A lightweight MERN stack (MongoDB, Express, React, Node) notes application that is responsive and installable as a PWA. The app now includes JWT-based authentication, SSO login, and sends a welcome email to users upon signing in. The API is secured with rate limiting using Upstash Redis, and the project maintains a clean, well-structured folder organization for easy navigation and scalability.
+A lightweight full-stack notes application built with PERN(React, Express, Node.js, and PostgreSQL), designed to be responsive and installable as a Progressive Web App (PWA). The application features JWT-based authentication, SSO login, and automatically sends a welcome email when users sign in.
+
+The backend API is secured with rate limiting powered by Upstash Redis, ensuring reliability and protection against abuse. The project follows a clean, well-structured folder architecture to support scalability and long-term maintainability.
+
+A CI/CD pipeline is integrated to automatically build, test, and deploy the application on every push, enabling fast and reliable releases with minimal manual intervention.
 
 ---
 
 ## Key features
 
-* MERN Stack: Full-stack application using MongoDB, Express, React, and Node.js.
+* PERN Stack: Full-stack application using PostgreSQL, Express, React, and Node.js.
 * Responsive Design: Optimized for 100% of screen sizes, including mobile, tablet, and desktop.
 * PWA Installable: Progressive Web App installable with <1s load time for quick access.
 * JWT Authentication: Secures 100% of API endpoints with JSON Web Tokens.
@@ -14,6 +18,7 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 * Welcome Email: Automatically sends emails to 100% of new users upon signup.
 * API Rate Limiting: Limits API calls to 100 requests per 15 minutes per user using Upstash Redis.
 * Clean Folder Structure: Organized into <10 main folders, ensuring maintainable and scalable code.
+* CI/CD pipeline is integrated to automatically build, test, and deploy the application.
 
 ---
 
@@ -29,9 +34,10 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 
 * **Frontend:** React (Vite) 
 * **Backend:** Node.js, Express
-* **Database:** MongoDB (Atlas recommended)
+* **Database:**  PostgreSQL(Neon DB)
 * **Rate limiting & cache:** Upstash Redis (serverless Redis)
 * **Email Sending:** Resend
+* **CI/CD:** Github Actions 
 * **Deployment:** Render
 
 ---
@@ -40,7 +46,7 @@ A lightweight MERN stack (MongoDB, Express, React, Node) notes application that 
 
 * Node.js v16+
 * npm 
-* MongoDB connection string (Atlas or self-hosted)
+* Neon DB connection
 * Upstash Redis REST/URL & token (for rate limiting)
 
 ---
@@ -68,7 +74,7 @@ Create `.env` files in `backend/` and `frontend/` as needed. Example variables f
 
 ```
 PORT=5001
-MONGODB_URI=mongodb+srv://<user>:<pass>@cluster0.mongodb.net/notesdb?retryWrites=true&w=majority
+DATABASE_URL="url_of_noen_db"
 UPSTASH_REDIS_REST_URL=https://usX1-web-..../
 UPSTASH_REDIS_REST_TOKEN=your_upstash_token
 ```
@@ -120,19 +126,26 @@ Open `http://localhost:5173` (Vite default) or port shown by your dev server.
 notesboardapp/
 ├── backend/
 │   ├── package.json
+│   ├── prisma/
+│   │   │   ├── migrations/
+│   │   |   └── schema.prisma
 │   ├── src/
-│   │   ├── server.js            # app entry            
+│   │   ├── server.js
+│   │   ├── app.js           # app entry            
 │   │   ├── routes/
-│   │   │   ├── notesRoutes.js
-│   │   |   └── authRoutes.js
+│   │   │   ├── note.route.js
+│   │   |   └── user.route.js
 │   │   ├── controllers/
-│   │   │   ├── notesController.js
-│   │   |   └── userController
+│   │   │   ├── note.controller.js
+│   │   |   └── user.controller.js
 │   │   ├── emails/
 │   │   │   └── emailHandlers.js
-│   │   ├── models/
-│   │   │   ├── Note.js
-│   │   |   └── User.js
+│   │   ├── services/
+│   │   │   ├── note.service.js
+│   │   |   └── User.service.js
+│   │   ├── repositories/
+│   │   │   ├── note.repo.js
+│   │   |   └── User.repo.js
 │   │   ├── middleware/
 │   │   │   ├── rateLimiter.js  # Upstash Redis integration
 │   │   |   └── authUser.js
