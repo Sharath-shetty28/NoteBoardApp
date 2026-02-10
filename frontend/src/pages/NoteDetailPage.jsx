@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-// import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { fetchNote, updateNote, deleteNote } from "../noteService";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
@@ -18,8 +17,6 @@ const NoteDetailPage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        // const res = await fetchNote(id);
-        // setNote(res.data);
         const res = await fetchNote(id);
         setNote(res);
       } catch (error) {
@@ -71,6 +68,13 @@ const NoteDetailPage = () => {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
         <LoaderIcon className="animate-spin size-10" />
+      </div>
+    );
+  }
+  if (!note) {
+    return (
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
+        <p>Note not found</p>
       </div>
     );
   }

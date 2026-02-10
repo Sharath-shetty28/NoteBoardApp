@@ -17,7 +17,10 @@ export const getAllNotes = (userId) => {
 
 export const getNoteById = (noteId, userId) => {
   return prisma.note.findFirst({
-    where: { id: noteId, userId },
+    where: {
+      id: Number(noteId),
+      userId: Number(userId),
+    },
     include: {
       user: {
         select: {

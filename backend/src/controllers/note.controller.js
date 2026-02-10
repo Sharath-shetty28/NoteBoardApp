@@ -56,7 +56,15 @@ export const updateNote = async (req, res) => {
   try {
     const noteId = Number(req.params.id);
     const { title, content } = req.body;
+    if (!noteId) {
+      return res.status(400).json({ message: "Invalid note ID" });
+    }
 
+    if (!title || !content) {
+      return res
+        .status(400)
+        .json({ message: "Title and content are required" });
+    }
     const updatedNote = await noteService.updateUserNote(noteId, req.user.id, {
       title,
       content,
