@@ -6,7 +6,10 @@ import * as noteService from "../services/note.service.js";
 
 export const getAllNotes = async (req, res) => {
   try {
-    const notes = await noteService.getUserNotes(req.user.id);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    console.log("Fetching notes for user:", req.user.id, "Page:", page, "Limit:", limit);
+    const notes = await noteService.getUserNotes(req.user.id, page, limit);
     if (!notes || notes.length === 0) {
       return res.json({ message: "No notes found for this user." });
     }

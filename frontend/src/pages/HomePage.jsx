@@ -10,6 +10,14 @@ const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const loadMore = async () => {
+    const res = await fetch(`/api/notes?page=${page + 1}&limit=10`);
+    const data = await res.json();
+    setNotes((prev) => [...prev, ...data]);
+    setPage((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const loadNotes = async () => {
@@ -52,6 +60,12 @@ const HomePage = () => {
             ))}
           </div>
         )}
+        <button
+          className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+          onClick={loadMore}
+        >
+          Load More
+        </button>
       </div>
     </div>
   );

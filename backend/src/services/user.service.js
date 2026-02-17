@@ -1,4 +1,4 @@
-import * as userRepo from "../repositories/user.repository.js";
+import * as userRepo from "../repositories/user.repo.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken } from "../utils/generateToken.js";
 import crypto from "crypto";

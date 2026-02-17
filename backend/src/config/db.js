@@ -2,6 +2,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+export default prisma;
+
 export const connectDB = async () => {
   try {
     await prisma.$connect();
@@ -11,5 +13,3 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
-
-export default prisma;

@@ -1,19 +1,20 @@
 import prisma from "../config/db.js";
 
-export const getAllNotes = (userId) => {
+export const getAllNotes = (userId, page = 1, limit = 10) => {
   return prisma.note.findMany({
-    where: { userId },
+    where: { userId, isDeleted: false },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+    take: limit,
+    skip: (page - 1) * limit,
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdAt: true,
     },
   });
 };
+
 
 export const getNoteById = (noteId, userId) => {
   return prisma.note.findFirst({

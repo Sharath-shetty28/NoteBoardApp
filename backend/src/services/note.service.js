@@ -1,4 +1,4 @@
-import * as noteRepo from "../repositories/note.repository.js";
+import * as noteRepo from "../repositories/note.repo.js";
 
 export const createUserNote = async (noteData) => {
   if (!noteData.title || !noteData.content)
@@ -6,9 +6,9 @@ export const createUserNote = async (noteData) => {
   return await noteRepo.createNote(noteData);
 };
 
-export const getUserNotes = async (userId) => {
+export const getUserNotes = async (userId, page, limit) => {
   if (!userId) throw new Error("User ID is required");
-  return await noteRepo.getAllNotes(userId);
+  return await noteRepo.getAllNotes(userId, page, limit);
 };
 
 export const updateUserNote = async (noteId, userId, noteData) => {
