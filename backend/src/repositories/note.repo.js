@@ -59,6 +59,7 @@ export const deleteNote = (noteId, userId) => {
     },
     data: {
       isDeleted: true,
+      deletedAt: new Date(),
     },
   });
 };

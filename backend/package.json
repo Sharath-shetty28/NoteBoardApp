@@ -25,6 +25,7 @@
     "google-auth-library": "^10.3.0",
     "jsonwebtoken": "^9.0.2",
     "mern-noteboardapp": "file:..",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.6",
     "nodemon": "^3.1.11",
     "resend": "^6.0.2"

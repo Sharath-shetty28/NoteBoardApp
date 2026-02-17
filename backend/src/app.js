@@ -13,6 +13,8 @@ app.use(express.json()); // this middleware will parse JSON bodies: req.body
 app.use(rateLimiter);
 app.use(cookieParser());
 
+startCleanupJob();
+
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 
