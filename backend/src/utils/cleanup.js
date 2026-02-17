@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import prisma from "../config/prisma.js";
+import prisma from "../config/db.js";
 const DAYS_TO_KEEP = 30;
 
 export const startCleanupJob = () => {

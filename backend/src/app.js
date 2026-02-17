@@ -5,6 +5,7 @@ import notesRoutes from "./routes/note.route.js";
 import authRoutes from "./routes/auth.route.js";
 import rateLimiter from "./middleware/rateLimiter.middleware.js";
 import path from "path";
+import { startCleanupJob } from "./utils/cleanup.js";
 
 const app = express();
 const __dirname = path.resolve();

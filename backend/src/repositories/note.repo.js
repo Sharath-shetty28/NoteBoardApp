@@ -21,13 +21,11 @@ export const getNoteById = (noteId, userId) => {
       id: Number(noteId),
       userId: Number(userId),
     },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdAt: true,
     },
   });
 };
@@ -47,6 +45,12 @@ export const updateNote = (noteId, userId, data) => {
     where: { id: noteId, userId },
     data: {
       ...data,
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdAt: true,
     },
   });
 };
