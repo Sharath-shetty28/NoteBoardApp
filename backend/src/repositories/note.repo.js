@@ -1,6 +1,6 @@
 import prisma from "../config/db.js";
 
-export const getAllNotes = (userId, page = 1, limit = 10) => {
+export const getAllNotes = (userId, page = 1, limit = 9) => {
   return prisma.note.findMany({
     where: { userId, isDeleted: false },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
@@ -14,7 +14,6 @@ export const getAllNotes = (userId, page = 1, limit = 10) => {
     },
   });
 };
-
 
 export const getNoteById = (noteId, userId) => {
   return prisma.note.findFirst({

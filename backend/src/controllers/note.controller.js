@@ -7,13 +7,12 @@ import * as noteService from "../services/note.service.js";
 export const getAllNotes = async (req, res) => {
   try {
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    console.log("Fetching notes for user:", req.user.id, "Page:", page, "Limit:", limit);
+    const limit = Number(req.query.limit) || 9;
     const notes = await noteService.getUserNotes(req.user.id, page, limit);
     if (!notes || notes.length === 0) {
       return res.json({ message: "No notes found for this user." });
     }
-    res.json(notes);
+    res.json({ notes, hasMore: notes.length === limit });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
