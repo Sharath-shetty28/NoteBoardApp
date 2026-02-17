@@ -19,7 +19,7 @@ export const updateUserNote = async (noteId, userId, noteData) => {
 
 export const deleteUserNote = async (noteId, userId) => {
   if (!noteId || !userId) throw new Error("All fields are required");
-  return await noteRepo.deletedNote(noteId, userId);
+  return await noteRepo.deleteNote(noteId, userId);
 };
 
 export const getUserNoteById = async (noteId, userId) => {

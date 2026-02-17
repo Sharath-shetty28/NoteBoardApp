@@ -51,19 +51,14 @@ export const updateNote = (noteId, userId, data) => {
   });
 };
 
-export const deletedNote = (noteId, userId) => {
-  return prisma.note.delete({
+export const deleteNote = (noteId, userId) => {
+  return prisma.note.update({
     where: {
       id: Number(noteId),
       userId: Number(userId),
     },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
+    data: {
+      isDeleted: true,
     },
   });
 };
