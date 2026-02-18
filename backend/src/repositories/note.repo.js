@@ -1,4 +1,5 @@
 import prisma from "../config/db.js";
+import { generateTags } from "../utils/generateTag.js";
 
 export const getAllNotes = (userId, page = 1, limit = 9) => {
   return prisma.note.findMany({
@@ -10,6 +11,7 @@ export const getAllNotes = (userId, page = 1, limit = 9) => {
       id: true,
       title: true,
       content: true,
+      tags: true,
       createdAt: true,
     },
   });
@@ -25,17 +27,20 @@ export const getNoteById = (noteId, userId) => {
       id: true,
       title: true,
       content: true,
+      tags: true,
       createdAt: true,
     },
   });
 };
 
-export const createNote = (data) => {
+export const createNote = async (data) => {
+  const tags = await generateTags(data.title, data.content);
   return prisma.note.create({
     data: {
       title: data.title,
       content: data.content,
       userId: Number(data.userId),
+      tags,
     },
   });
 };
@@ -50,6 +55,7 @@ export const updateNote = (noteId, userId, data) => {
       id: true,
       title: true,
       content: true,
+      tags: true,
       createdAt: true,
     },
   });
@@ -64,6 +70,28 @@ export const deleteNote = (noteId, userId) => {
     data: {
       isDeleted: true,
       deletedAt: new Date(),
+    },
+  });
+};
+
+export const searchTag = (userId, tag) => {
+  return prisma.note.findMany({
+    where: {
+      userId: Number(userId),
+      tags: {
+        some: {
+          name: {
+            contains: tag,
+            mode: "insensitive",
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      createdAt: true,
     },
   });
 };

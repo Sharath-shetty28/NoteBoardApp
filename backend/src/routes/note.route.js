@@ -11,7 +11,7 @@ import rateLimiter from "../middleware/rateLimiter.middleware.js";
 
 const router = express.Router();
 
-router.use(rateLimiter, authUser);
+router.use(authUser);
 
 router.get("/", getAllNotes);
 router.get("/:id", getNoteById);
