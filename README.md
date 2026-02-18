@@ -1,4 +1,4 @@
-# <h1 align="center">📝 NotesBoardApp ✨</h1>
+# <h1 align="center">📝 KnowledgeFlow AI ✨</h1>
 
 A lightweight full-stack notes application built with PERN(React, Express, Node.js, and PostgreSQL), designed to be responsive and installable as a Progressive Web App (PWA). The application features JWT-based authentication, SSO login, and automatically sends a welcome email when users sign in.
 
