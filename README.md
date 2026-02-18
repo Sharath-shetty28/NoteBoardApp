@@ -56,8 +56,8 @@ A CI/CD pipeline is integrated to automatically build, test, and deploy the appl
 ### 1. Clone repository
 
 ```bash
-git clone https://github.com/<your-username>/NoteBoardApp.git
-cd NoteBoardApp
+git clone https://github.com/<your-username>/KnowledgeFlowAI.git
+cd KnowledgeFlowAI
 ```
 
 ### 2. Install dependencies

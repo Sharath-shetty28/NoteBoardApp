@@ -36,7 +36,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 ">
-      <h1 className="text-3xl font-bold mb-6 text-white">NoteBoardApp</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white">KnowledgeFlow AI</h1>
       <div className=" p-6 rounded-2xl shadow-lg w-96 bg-black/30 border border-slate-700">
         <h2 className="text-xl font-bold mb-4 text-white text-center">
           Forgot Password

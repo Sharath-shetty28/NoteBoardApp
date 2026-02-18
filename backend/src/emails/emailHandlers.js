@@ -6,20 +6,20 @@ export async function sendWelcomeEmail(name, to) {
     await resend.emails.send({
       from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to,
-      subject: "Welcome to NoteBoardApp 🎉",
+      subject: "Welcome to KnowledgeFlow AI 🎉",
       html: `
       <div style="font-family: Arial, sans-serif; background-color: #0F172A; padding: 30px;">
     <div style="max-width: 600px; margin: auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
       <!-- Header -->
       <div style="background: #7480FF; color: white; text-align: center; padding: 20px;">
-        <h1 style="margin: 0;">👋 Welcome to NoteBoardApp</h1>
+        <h1 style="margin: 0;">👋 Welcome to KnowledgeFlow AI</h1>
       </div>
 
       <!-- Body -->
       <div style="padding: 25px; color: #333;">
         <p>Hi ${name},</p>
         <p>We’re super excited to have you onboard 🎉</p>
-        <p>With <strong>NoteBoardApp</strong>, you can organize your notes, ideas, and projects all in one place.</p>
+        <p>With <strong>KnowledgeFlow AI</strong>, you can organize your notes, ideas, and projects all in one place.</p>
 
         <div style="text-align: center; margin: 30px 0;">
           <a href="noteboardapp.onrender.com/login" target="_blank" rel="noopener noreferrer"
@@ -29,12 +29,12 @@ export async function sendWelcomeEmail(name, to) {
         </div>
 
         <p>If you have any questions, just reply to this email — we’re always happy to help!</p>
-        <p>Cheers,<br>The NoteBoardApp Team 🚀</p>
+        <p>Cheers,<br>The KnowledgeFlow AI Team 🚀</p>
       </div>
 
       <!-- Footer -->
       <div style="background: #f3f4f6; text-align: center; padding: 15px; font-size: 12px; color: #777;">
-        © ${new Date().getFullYear()} NoteBoardApp. All rights reserved.
+        © ${new Date().getFullYear()} KnowledgeFlow AI. All rights reserved.
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@ export async function sendPasswordResetEmail(to, resetLink) {
     
     <!-- Header -->
     <div style="background: #4F46E5; color: white; text-align: center; padding: 25px;">
-      <h1 style="margin: 0; font-size: 24px; font-weight: bold;">NoteBoardApp</h1>
+      <h1 style="margin: 0; font-size: 24px; font-weight: bold;">KnowledgeFlow AI</h1>
     </div>
 
     <!-- Body -->
@@ -86,7 +86,7 @@ export async function sendPasswordResetEmail(to, resetLink) {
 
     <!-- Footer -->
     <div style="background: #f9fafb; text-align: center; padding: 18px; font-size: 13px; color: #6B7280;">
-      © ${new Date().getFullYear()} <strong>NoteBoardApp</strong>. All rights reserved.
+      © ${new Date().getFullYear()} <strong>KnowledgeFlow AI</strong>. All rights reserved.
     </div>
   </div>
 </div>

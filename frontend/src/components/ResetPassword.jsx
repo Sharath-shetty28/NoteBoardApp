@@ -57,7 +57,7 @@ export default function ResetPassword() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 ">
-      <h1 className="text-3xl font-bold mb-6 text-white">NoteBoardApp</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white">KnowledgeFlow AI</h1>
       <div className="bg-black/30 p-6 rounded-2xl shadow-lg w-96">
         <h2 className="text-xl font-bold mb-4 text-center text-white">
           Reset Password

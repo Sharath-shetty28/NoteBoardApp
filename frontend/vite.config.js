@@ -14,8 +14,8 @@ export default defineConfig({
         "apple-touch-icon.png",
       ],
       manifest: {
-        name: "NoteBoardApp",
-        short_name: "Notes",
+        name: "KnowledgeFlow AI",
+        short_name: "KnowledgeFlow",
         description: "A simple notes app with MERN stack",
         theme_color: "#ffffff",
         background_color: "#ffffff",
