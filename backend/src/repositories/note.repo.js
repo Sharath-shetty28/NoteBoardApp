@@ -4,10 +4,8 @@ import { redis } from "../lib/cache.js";
 
 export const getAllNotes = async (userId, page = 1, limit = 9) => {
   const cacheKey = `notes:${userId}:page:${page}`;
-  console.log(cacheKey);
   const cached = await redis.get(cacheKey);
   if (cached) {
-    console.log("Serving from cache 🚀");
     return cached;
   }
   const notes = await prisma.note.findMany({
@@ -24,7 +22,6 @@ export const getAllNotes = async (userId, page = 1, limit = 9) => {
     },
   });
   await redis.set(cacheKey, notes, { ex: 60 });
-  console.log("Setting cache for:", cacheKey);
   return notes;
 };
 
