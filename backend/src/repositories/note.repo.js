@@ -1,8 +1,16 @@
 import prisma from "../config/db.js";
 import { generateTags } from "../utils/generateTag.js";
+import { redis } from "../lib/cache.js";
 
-export const getAllNotes = (userId, page = 1, limit = 9) => {
-  return prisma.note.findMany({
+export const getAllNotes = async (userId, page = 1, limit = 9) => {
+  const cacheKey = `notes:${userId}:page:${page}`;
+  console.log(cacheKey);
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    console.log("Serving from cache 🚀");
+    return cached;
+  }
+  const notes = await prisma.note.findMany({
     where: { userId, isDeleted: false },
     orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
     take: limit,
@@ -15,6 +23,9 @@ export const getAllNotes = (userId, page = 1, limit = 9) => {
       createdAt: true,
     },
   });
+  await redis.set(cacheKey, notes, { ex: 60 });
+  console.log("Setting cache for:", cacheKey);
+  return notes;
 };
 
 export const getNoteById = (noteId, userId) => {
