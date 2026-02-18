@@ -13,7 +13,7 @@ import rateLimiter from "../middleware/rateLimiter.middleware.js";
 
 const userRouter = express.Router();
 
-// userRouter.use(rateLimiter);
+userRouter.use(rateLimiter);
 
 userRouter.post("/signup", signup);
 userRouter.post("/login", login);

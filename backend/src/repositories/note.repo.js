@@ -27,7 +27,6 @@ export const getNoteById = (noteId, userId) => {
       id: true,
       title: true,
       content: true,
-      tags: true,
       createdAt: true,
     },
   });
@@ -45,17 +44,18 @@ export const createNote = async (data) => {
   });
 };
 
-export const updateNote = (noteId, userId, data) => {
+export const updateNote = async (noteId, userId, data) => {
+  const tags = await generateTags(data.title, data.content);
   return prisma.note.update({
     where: { id: noteId, userId },
     data: {
       ...data,
+      tags,
     },
     select: {
       id: true,
       title: true,
       content: true,
-      tags: true,
       createdAt: true,
     },
   });
