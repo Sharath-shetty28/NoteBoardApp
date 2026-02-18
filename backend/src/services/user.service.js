@@ -70,7 +70,7 @@ export const forgotPasswordService = async (email) => {
     .update(resetToken)
     .digest("hex");
   userRepo.passwordResetRepo(email, hashedToken);
-  const resetUrl = `https://noteboardapp.onrender.com/reset-password/${resetToken}`;
+  const resetUrl = `https://knowledgeflow-ai.onrender.com/reset-password/${resetToken}`;
   await sendPasswordResetEmail(email, resetUrl);
   return { success: true, message: "Password reset email sent" };
 };

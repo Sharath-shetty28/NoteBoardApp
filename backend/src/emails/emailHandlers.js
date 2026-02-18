@@ -22,7 +22,7 @@ export async function sendWelcomeEmail(name, to) {
         <p>With <strong>KnowledgeFlow AI</strong>, you can organize your notes, ideas, and projects all in one place.</p>
 
         <div style="text-align: center; margin: 30px 0;">
-          <a href="noteboardapp.onrender.com/login" target="_blank" rel="noopener noreferrer"
+          <a href="https://knowledgeflow-ai.onrender.com/login" target="_blank" rel="noopener noreferrer"
              style="background: #7480FF; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold;">
              Get Started
           </a>
