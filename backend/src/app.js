@@ -14,7 +14,7 @@ import { startCleanupJob } from "./utils/cleanup.js";
 const app = express();
 const __dirname = path.resolve();
 
-app.use(express.json()); // this middleware will parse JSON bodies: req.body
+app.use(express.json());
 app.use(rateLimiter);
 app.use(cookieParser());
 
